@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>통합 대시보드</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- 로그인 페이지 -->
+        <div id="login-page" class="page">
+            <div class="login-container">
+                <div class="login-box">
+                    <h1>통합 대시보드</h1>
+                    <p class="subtitle">대시보드에 접속하려면 비밀번호를 입력하세요</p>
+
+                    <form id="login-form" onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label for="password">비밀번호</label>
+                            <input type="password" id="password" placeholder="비밀번호 입력" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">로그인</button>
+                    </form>
+
+                    <div id="login-error" class="error-message" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 대시보드 페이지 -->
+        <div id="dashboard-page" class="page" style="display: none;">
+            <nav class="navbar">
+                <div class="navbar-content">
+                    <h1 class="navbar-title">통합 대시보드</h1>
+                    <button class="btn btn-small" onclick="logout()">로그아웃</button>
+                </div>
+            </nav>
+
+            <div class="container">
+                <!-- 시스템 상태 -->
+                <section class="system-status-section">
+                    <h2>시스템 상태</h2>
+                    <div class="system-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">CPU 사용률</div>
+                            <div class="stat-value" id="cpu-usage">--</div>
+                            <div class="stat-bar">
+                                <div class="stat-progress" id="cpu-progress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">메모리 사용률</div>
+                            <div class="stat-value" id="memory-usage">--</div>
+                            <div class="stat-bar">
+                                <div class="stat-progress" id="memory-progress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">디스크 사용률</div>
+                            <div class="stat-value" id="disk-usage">--</div>
+                            <div class="stat-bar">
+                                <div class="stat-progress" id="disk-progress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">실행 중인 서비스</div>
+                            <div class="stat-value" id="running-services">0/0</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 서비스 목록 -->
+                <section class="services-section">
+                    <h2>서비스 관리</h2>
+                    <div id="services-list" class="services-grid">
+                        <div class="loading">서비스를 불러오는 중...</div>
+                    </div>
+                </section>
+
+                <!-- 로그 뷰어 -->
+                <section class="logs-section">
+                    <div class="logs-header">
+                        <h2>로그</h2>
+                        <div class="logs-controls">
+                            <select id="log-service-select" onchange="changeLogService()">
+                                <option value="">-- 서비스 선택 --</option>
+                            </select>
+                            <button class="btn btn-small" onclick="clearLogs()">로그 초기화</button>
+                            <button class="btn btn-small" onclick="toggleAutoRefresh()">자동 새로고침</button>
+                        </div>
+                    </div>
+                    <div id="logs-container" class="logs-viewer">
+                        <div class="log-line">서비스를 선택하세요</div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
