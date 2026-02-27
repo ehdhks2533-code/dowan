@@ -3,7 +3,7 @@ from datetime import timedelta
 
 # Flask Configuration
 class Config:
-    DEBUG = True
+    DEBUG = False
     SECRET_KEY = os.getenv('SECRET_KEY', 'your-secret-key-change-this')
 
     # JWT Configuration

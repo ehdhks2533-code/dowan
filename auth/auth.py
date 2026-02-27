@@ -1,41 +1,30 @@
-import jwt
+import hashlib
+import secrets
 from datetime import datetime, timedelta
 from functools import wraps
 from flask import request, jsonify
 from config import Config
 
 class AuthManager:
-    """JWT Token 기반 인증 관리"""
+    """간단한 토큰 기반 인증 관리"""
+
+    # 토큰 저장소 (실제 프로덕션에서는 DB 사용)
+    _valid_tokens = set()
 
     @staticmethod
     def generate_token(user_id='admin'):
-        """토큰 생성"""
-        payload = {
-            'user_id': user_id,
-            'iat': datetime.utcnow(),
-            'exp': datetime.utcnow() + Config.JWT_ACCESS_TOKEN_EXPIRES
-        }
-        token = jwt.encode(
-            payload,
-            Config.JWT_SECRET_KEY,
-            algorithm='HS256'
-        )
+        """토큰 생성 (간단한 해시 기반)"""
+        # 무작위 토큰 생성
+        token = secrets.token_urlsafe(32)
+        AuthManager._valid_tokens.add(token)
         return token
 
     @staticmethod
     def verify_token(token):
         """토큰 검증"""
-        try:
-            payload = jwt.decode(
-                token,
-                Config.JWT_SECRET_KEY,
-                algorithms=['HS256']
-            )
-            return payload
-        except jwt.ExpiredSignatureError:
-            return None
-        except jwt.InvalidTokenError:
-            return None
+        if token in AuthManager._valid_tokens:
+            return {'user_id': 'admin'}
+        return None
 
     @staticmethod
     def verify_password(password):
