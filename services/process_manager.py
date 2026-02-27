@@ -33,14 +33,14 @@ class ProcessManager:
             # 로그 파일 준비
             log_path = LogManager.get_log_path(service_id)
 
-            # 프로세스 시작
+            # 프로세스 시작 (프로젝트 루트 디렉토리에서)
             with open(log_path, 'a') as log_file:
                 process = subprocess.Popen(
                     service['command'],
                     shell=True,
                     stdout=log_file,
                     stderr=subprocess.STDOUT,
-                    cwd=os.path.dirname(__file__)
+                    cwd=os.path.dirname(os.path.dirname(__file__))
                 )
 
             ProcessManager._running_processes[service_id] = process.pid
